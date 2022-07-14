@@ -21,7 +21,7 @@ const {
   secondsValue: document.querySelector('[data-seconds]'),
   fields: document.querySelectorAll('.field'),
 };
-console.dir(startBtn);
+
 //Basic markup
 fields[0].parentElement.style.display = 'flex';
 fields.forEach(field => {
@@ -47,12 +47,11 @@ const options = {
     //Disables start button if user changed date from future to before
     if (Date.now() - selectedDates[0].getTime() >= 0) {
       addAttributeDisabled(startBtn, true);
-      // startBtn.setAttribute('disabled', '');
+
       Notify.failure('Please choose a date in the future');
       return;
     }
-    // addAttribute(startBtn, 'disabled', false);
-    // deleteAttribute(startBtn, 'disabled');
+
     addAttributeDisabled(startBtn, false);
   },
 };
@@ -61,7 +60,6 @@ const fp = flatpickr(flatpickrInput, options);
 
 //Event to start timer, change markup
 startBtn.addEventListener('click', () => {
-  // addAttribute(startBtn, 'disabled', '');
   addAttributeDisabled(startBtn, true);
 
   intervalId = setInterval(() => {
@@ -108,7 +106,6 @@ function addLeadingZero(value) {
 }
 
 function addAttributeDisabled(elem, value) {
-  // elem.setAttribute(name, value);
   elem.disabled = value;
 }
 
