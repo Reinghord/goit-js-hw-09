@@ -21,7 +21,7 @@ const {
   secondsValue: document.querySelector('[data-seconds]'),
   fields: document.querySelectorAll('.field'),
 };
-
+console.dir(startBtn);
 //Basic markup
 fields[0].parentElement.style.display = 'flex';
 fields.forEach(field => {
@@ -46,11 +46,14 @@ const options = {
     //Using Notify for alert
     //Disables start button if user changed date from future to before
     if (Date.now() - selectedDates[0].getTime() >= 0) {
-      startBtn.setAttribute('disabled', '');
+      addAttributeDisabled(startBtn, true);
+      // startBtn.setAttribute('disabled', '');
       Notify.failure('Please choose a date in the future');
       return;
     }
-    startBtn.removeAttribute('disabled');
+    // addAttribute(startBtn, 'disabled', false);
+    // deleteAttribute(startBtn, 'disabled');
+    addAttributeDisabled(startBtn, false);
   },
 };
 //Initialize flatpickr
@@ -58,7 +61,8 @@ const fp = flatpickr(flatpickrInput, options);
 
 //Event to start timer, change markup
 startBtn.addEventListener('click', () => {
-  startBtn.setAttribute('disabled', '');
+  // addAttribute(startBtn, 'disabled', '');
+  addAttributeDisabled(startBtn, true);
 
   intervalId = setInterval(() => {
     const timeDelta = fp.selectedDates[0].getTime() - Date.now();
@@ -69,10 +73,11 @@ startBtn.addEventListener('click', () => {
     }
     const convertedDelta = convertMs(timeDelta);
 
-    daysValue.textContent = addLeadingZero(convertedDelta.days);
-    hoursValue.textContent = addLeadingZero(convertedDelta.hours);
-    minutesValue.textContent = addLeadingZero(convertedDelta.minutes);
-    secondsValue.textContent = addLeadingZero(convertedDelta.seconds);
+    changeTextContent(daysValue, convertedDelta, 'days');
+    changeTextContent(hoursValue, convertedDelta, 'hours');
+    changeTextContent(minutesValue, convertedDelta, 'minutes');
+    changeTextContent(secondsValue, convertedDelta, 'seconds');
+
     console.log(convertedDelta);
   }, 1000);
 });
@@ -100,4 +105,13 @@ function convertMs(ms) {
 //Function to make string of minimum 2 symbols and start with "0"
 function addLeadingZero(value) {
   return String(value).padStart(2, '0');
+}
+
+function addAttributeDisabled(elem, value) {
+  // elem.setAttribute(name, value);
+  elem.disabled = value;
+}
+
+function changeTextContent(elem, obj, units) {
+  elem.textContent = addLeadingZero(obj[units]);
 }
